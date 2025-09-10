@@ -18,3 +18,21 @@ End-to-end UI tests for [the-internet.herokuapp.com](https://the-internet.heroku
 - (Optional) Black + Flake8 linters
 
 ## 📁 Project Structure
+project/
+├── tests/
+│   ├── conftest.py
+│   ├── test_login.py
+│   ├── test_dropdown.py
+│   └── ...
+├── pages/
+│   ├── base_page.py
+│   ├── login_page.py
+│   ├── dropdown_page.py
+│   └── ...
+├── utils/
+│   └── helpers.py
+├── reports/
+├── requirements.txt
+├── pytest.ini
+└── .github/workflows/
+    └── ci.yml
