@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python package
+name: Herokuapp project
 
 on:
   push:
@@ -11,10 +11,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+
+    env:
+      CI: "true"
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
     - uses: actions/checkout@v4
@@ -22,6 +22,16 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Setup Chrome Browser
+      uses: browser-actions/setup-chrome@latest
+      with:
+        chrome-version: stable
+        
+    - name: Display Chrome Version
+      run: |
+        google-chrome --version
+        which google-chrome
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -35,4 +45,26 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest
+        pytest --alluredir=./reports/allure-results \
+               --clean-alluredir \
+               -v \
+               --tb=short \
+               --browser=chrome \
+               --headless
+      continue-on-error: true 
+      
+    - name: Allure Report action from marketplace
+      uses: simple-elf/allure-report-action@master
+      if: always()
+      with:
+        allure_results: ./reports/allure-results
+        allure_history: ./reports/allure-history
+        keep_reports: 20
+    
+    - name: Deploy report to Github Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3
+      env:
+        PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PUBLISH_BRANCH: gh-pages
+        PUBLISH_DIR: ./reports/allure-history
