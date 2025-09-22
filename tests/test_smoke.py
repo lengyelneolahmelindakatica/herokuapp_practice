@@ -1,6 +1,10 @@
-from home_page import HomePage
+import sys
+import os
+from page.home_page import HomePage
+# Project root hozzáadása a Python path-hoz
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-class Smoke(object):
+class TestSmoke(object):
     def setup_method(self):
         self.homepage = HomePage()
         self.homepage.get()
