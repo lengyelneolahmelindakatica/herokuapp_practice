@@ -2,10 +2,8 @@ import sys
 import os
 import allure
 
-from page.home_page import HomePage
-# Project root hozzáadása a Python path-hoz
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+from page.home_page import HomePage
 
 @allure.epic("Homepage Testing")
 @allure.feature("Link Verification")
