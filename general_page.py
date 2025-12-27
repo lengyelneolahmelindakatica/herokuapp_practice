@@ -1,19 +1,17 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
 import os
 from datetime import datetime
+from generate_driver import get_preconfigured_chrome_driver
 
 
 class GeneralPage(object):
-    def __init__(self, url):
+    def __init__(self, url, browser=None):
         self.URL = url
-        options = Options()
-        options.add_argument('--disable-search-engine-choice-screen')
-        options.add_experimental_option("detach", True)
-        self.browser = webdriver.Chrome(options=options)
-        self.browser.maximize_window()
-        self.wait = WebDriverWait(self.browser, 5)
+        if browser is None:
+            self.browser = get_preconfigured_chrome_driver()
+        else:
+            self.browser = browser
+
 
     # ===== BROWSER MANAGEMENT =====
     def get(self):

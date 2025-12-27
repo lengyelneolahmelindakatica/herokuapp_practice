@@ -5,7 +5,7 @@ Komplett példa a POM + Pytest + Allure használatára
 
 import pytest
 import allure
-from login_page import LoginPage
+from page.login_page import LoginPage
 from pages.secure_area_page import SecureAreaPage
 
 
